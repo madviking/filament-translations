@@ -29,7 +29,14 @@ php artisan vendor:publish --tag="filament-translations-config"
 php artisan migrate
 ```
 
-In `config/app.php` (Laravel) or `bootstrap/app.php` (Lumen) you should replace Laravel's translation service provider
+In `config/app.php` (Laravel) or `bootstrap/app.php` (Lumen) you should replace Laravel's translation service provider 
+if you have one, or if you don't, just add the following service provider aliases:
+
+```php
+'translator' => \Spatie\TranslationLoader\TranslationServiceProvider::class,
+'translation.loader' => \Spatie\TranslationLoader\TranslationServiceProvider::class,
+```
+
 
 ```php
 Illuminate\Translation\TranslationServiceProvider::class,
@@ -69,6 +76,19 @@ and now clear cache
 ```bash
 php artisan optimize:clear
 ```
+
+To add the translations UI to your panel, add it to the `resources` method of your panel:
+```php
+    public function panel(Panel $panel): Panel
+    {
+        return $panel
+            ->resources([
+                \io3x1\FilamentTranslations\Resources\TranslationResource::class,
+            ])
+```
+
+
+
 
 ## Changelog
 

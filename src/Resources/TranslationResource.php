@@ -5,8 +5,8 @@ namespace io3x1\FilamentTranslations\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use io3x1\FilamentTranslations\Models\Translation;
-use Filament\Resources\Form;
-use Filament\Resources\Table;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use io3x1\FilamentTranslations\Resources\TranslationResource\Pages;
 
@@ -19,17 +19,17 @@ class TranslationResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'key';
 
-    protected static function getNavigationLabel(): string
+    public static function getNavigationLabel(): string
     {
         return trans('filament-translations::translation.label');
     }
 
-    protected static function getNavigationGroup(): ?string
+    public static function getNavigationGroup(): ?string
     {
         return config('filament-translations.languages-switcher-menu.group', "Translations");
     }
 
-    protected static function getNavigationIcon(): string
+    public static function getNavigationIcon(): string
     {
         return config('filament-translations.languages-switcher-menu.icon', "heroicon-o-translate");
     }

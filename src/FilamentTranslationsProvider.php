@@ -9,9 +9,10 @@ use io3x1\FilamentTranslations\Resources\TranslationResource;
 use Filament\Navigation\NavigationItem;
 use Filament\Facades\Filament;
 use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 
-class FilamentTranslationsProvider extends PluginServiceProvider
+class FilamentTranslationsProvider extends PackageServiceProvider
 {
 
     public function configurePackage(Package $package): void

@@ -15,7 +15,7 @@ class ManageTranslations extends ManageRecords
 {
     protected static string $resource = TranslationResource::class;
 
-    protected function getTitle(): string
+    public function getTitle(): string
     {
         return trans('filament-translations::translation.title.home');
     }
@@ -24,7 +24,7 @@ class ManageTranslations extends ManageRecords
     {
         return [
             ButtonAction::make('scan')
-                ->icon('heroicon-o-document-search')
+                ->icon('heroicon-o-magnifying-glass')
                 ->action('scan')
                 ->label(trans('filament-translations::translation.scan')),
             ButtonAction::make('settings')

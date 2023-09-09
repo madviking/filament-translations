@@ -16,7 +16,7 @@ class ListTranslations extends ListRecords
     protected static string $resource = TranslationResource::class;
 
 
-    protected function getTitle(): string
+    public function getTitle(): string
     {
         return trans('filament-translations::translation.title.list');
     }
@@ -58,7 +58,6 @@ class ListTranslations extends ListRecords
     {
         $scan = new SaveScan();
         $scan->save();
-
         $this->notify('success', 'Translation Has Been Loaded');
     }
 }
