@@ -24,10 +24,10 @@
     "minimum-stability": "dev",
     "require": {
         "php": "^8.1",
-        "filament/filament": "^2.16",
-        "filament/notifications": "^2.16",
-        "spatie/laravel-translation-loader": "^2.7",
-        "spatie/laravel-package-tools": "^1.10"
+        "filament/filament": "^3.0",
+        "filament/notifications": "^3.0-stable",
+        "spatie/laravel-translation-loader": "^2.7.6",
+        "spatie/laravel-package-tools": "^1.16"
     },
     "config": {
         "sort-packages": true
