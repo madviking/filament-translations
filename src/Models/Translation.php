@@ -40,6 +40,9 @@ class Translation extends LanguageLine
     public function getTranslation(string $locale, string $group = null): string
     {
 
+        // todo: add missing translation
+
+        // todo: google translate
 
 
         if ($group === '*' && !isset($this->text[$locale])) {
