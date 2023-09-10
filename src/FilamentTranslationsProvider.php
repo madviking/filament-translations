@@ -5,6 +5,7 @@ namespace io3x1\FilamentTranslations;
 use Filament\Navigation\UserMenuItem;
 use Illuminate\Support\ServiceProvider;
 use Filament\PluginServiceProvider;
+use io3x1\FilamentTranslations\Extensions\DbTranslator;
 use io3x1\FilamentTranslations\Resources\TranslationResource;
 use Filament\Navigation\NavigationItem;
 use Filament\Facades\Filament;
@@ -24,9 +25,17 @@ class FilamentTranslationsProvider extends PackageServiceProvider
         TranslationResource::class,
     ];
 
+
+
     public function boot(): void
     {
         parent::boot();
+
+        $this->app->extend('translator', function ($translator, $app) {
+            $loader = $translator->getLoader();  // Get the loader from the original translator
+            $locale = app()->getLocale();
+            return new DbTranslator($loader, $locale);
+        });
 
         //Load translations
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'filament-translations');

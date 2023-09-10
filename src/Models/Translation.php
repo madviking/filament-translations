@@ -7,6 +7,15 @@ use Spatie\TranslationLoader\LanguageLine;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/*
+ * This package uses a different database structure compared to spatie/laravel-translation-loader package.
+ *
+ * Additional features (controlled from config file):
+ *  - automatic addition of missing translation strings
+ *  - automatic translation using Google Translate
+ *
+ * @author: timo at east.fi
+ * */
 
 
 class Translation extends LanguageLine
@@ -31,6 +40,10 @@ class Translation extends LanguageLine
         "locale"
     ];
 
+    public function __construct()
+    {
+        return parent::__construct();
+    }
 
     public static function getTranslatableLocales(): array
     {
@@ -40,11 +53,10 @@ class Translation extends LanguageLine
     public function getTranslation(string $locale, string $group = null): string
     {
 
+        //dd($locale);
         // todo: add missing translation
 
         // todo: google translate
-
-
         if ($group === '*' && !isset($this->text[$locale])) {
             $fallback = config('app.fallback_locale');
             return $this->text[$fallback] ?? $this->key;
