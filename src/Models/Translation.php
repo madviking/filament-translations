@@ -3,6 +3,7 @@
 namespace io3x1\FilamentTranslations\Models;
 
 use Illuminate\Support\Facades\Cache;
+use io3x1\FilamentTranslations\Traits\TraitTranslator;
 use Spatie\TranslationLoader\LanguageLine;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +23,7 @@ class Translation extends LanguageLine
 {
     use HasFactory;
     use SoftDeletes;
+    use TraitTranslator;
 
     public $translatable = ['text'];
 
@@ -50,10 +52,14 @@ class Translation extends LanguageLine
         return config('filament-translations.locals');
     }
 
+    /*
+     * This loads translation group
+     * */
     public function getTranslation(string $locale, string $group = null): string
     {
 
-        //dd($locale);
+        $locale = $locale ?? app()->getLocale();
+
         // todo: add missing translation
 
         // todo: google translate
