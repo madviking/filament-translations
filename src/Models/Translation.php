@@ -27,7 +27,8 @@ class Translation extends LanguageLine
     protected $fillable = [
         "group",
         "key",
-        "text"
+        "text",
+        "locale"
     ];
 
 
@@ -38,23 +39,25 @@ class Translation extends LanguageLine
 
     public function getTranslation(string $locale, string $group = null): string
     {
+
+
+
         if ($group === '*' && !isset($this->text[$locale])) {
             $fallback = config('app.fallback_locale');
-
             return $this->text[$fallback] ?? $this->key;
         }
+
         return $this->text[$locale] ?? '';
     }
 
     public function setTranslation(string $locale, string $value): self
     {
         $this->text = array_merge($this->text ?? [], [$locale => $value]);
-
         return $this;
     }
 
     protected function getTranslatedLocales(): array
     {
-        return array_keys($this->text);
+        return is_array($this->text) ? array_keys($this->text) : [];
     }
 }

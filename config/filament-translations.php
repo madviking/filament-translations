@@ -25,6 +25,12 @@ return [
     */
     "redirect" => "next",
 
+    /* Automatically create a translation record if it doesn't exist yet */
+    "auto_create" => true,
+
+    /* If string for targeted locale doesn't exist, create the record and translate with Google. */
+    "google_translate" => true,
+    "google_key" => 'YOUR_GOOGLE_KEY',
 
     /*
     |--------------------------------------------------------------------------
