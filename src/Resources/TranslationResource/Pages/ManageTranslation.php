@@ -1,17 +1,17 @@
 <?php
 
-namespace io3x1\FilamentTranslations\Resources\TranslationsResource\Pages;
+namespace io3x1\FilamentTranslations\Resources\TranslationResource\Pages;
 
-use App\Filament\Resources\TranslationsResource;
 use App\Models\User;
 use Filament\Actions;
 use Filament\Forms\Components\Select;
 use Filament\Pages\Actions\Action;
 use Filament\Resources\Pages\ManageRecords;
+use io3x1\FilamentTranslations\Resources\TranslationResource;
 
-class ManageTranslations extends ManageRecords
+class ManageTranslation extends ManageRecords
 {
-    protected static string $resource = TranslationsResource::class;
+    protected static string $resource = TranslationResource::class;
 
     protected function getHeaderActions(): array
     {

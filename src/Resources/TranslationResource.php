@@ -2,7 +2,6 @@
 
 namespace io3x1\FilamentTranslations\Resources;
 
-use App\Filament\Resources\TranslationsResource\Pages;
 use App\Models\Translations;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -12,9 +11,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Filters\Filter;
-use io3x1\FilamentTranslations\Resources\TranslationsResource\Pages\ManageTranslations;
+use io3x1\FilamentTranslations\Resources\TranslationResource\Pages\ManageTranslation;
 
-class TranslationsResource extends Resource
+class TranslationResource extends Resource
 {
     protected static ?string $model = Translations::class;
 
@@ -60,6 +59,8 @@ class TranslationsResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('key')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('locale')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('group')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('text')
@@ -104,7 +105,7 @@ class TranslationsResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageTranslations::route('/'),
+            'index' => ManageTranslation::route('/'),
         ];
-    }    
+    }
 }

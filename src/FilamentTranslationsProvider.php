@@ -5,7 +5,7 @@ namespace io3x1\FilamentTranslations;
 use Filament\Navigation\UserMenuItem;
 use Illuminate\Support\ServiceProvider;
 use Filament\PluginServiceProvider;
-use io3x1\FilamentTranslations\Resources\TranslationsResource;
+use io3x1\FilamentTranslations\Resources\TranslationResource;
 use Filament\Navigation\NavigationItem;
 use Filament\Facades\Filament;
 use Spatie\LaravelPackageTools\Package;
@@ -21,7 +21,7 @@ class FilamentTranslationsProvider extends PackageServiceProvider
     }
 
     protected array $resources = [
-        TranslationsResource::class,
+        TranslationResource::class,
     ];
 
     public function boot(): void
