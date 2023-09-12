@@ -2,16 +2,13 @@
 
 # Filament Translations
 
-Manage your translation with DB and cache, you can scan your languages tags like `trans()`, `__()`, and get the string inside and translate them use UI.
-
-this plugin is build in [spatie/laravel-translation-loader](https://github.com/spatie/laravel-translation-loader)
+Manage your translation with DB and cache, you can scan your languages tags like `trans()`, `__()` from files, and get the string inside DB and translate them use UI. Also provides automatic, optional Google translation, language switcher and more.
 
 ## Screenshots
 
 ![Screenshot of list](./arts/list.png)
-![Screenshot of settings](./arts/setting.png)
 ![Screenshot of edit](./arts/edit.png)
-
+![Screenshot of switcher](./arts/switcher.png)
 
 ## Installation
 
@@ -33,20 +30,13 @@ In `config/app.php` (Laravel) or `bootstrap/app.php` (Lumen) you should replace 
 if you have one, or if you don't, just add the following service provider aliases:
 
 ```php
-'translator' => \Spatie\TranslationLoader\TranslationServiceProvider::class,
-'translation.loader' => \Spatie\TranslationLoader\TranslationServiceProvider::class,
+'providers' => [
+        \io3x1\FilamentTranslations\FilamentTranslationsProvider::class
+
+'aliases' => [
+        'translator' => \io3x1\FilamentTranslations\Extensions\DbTranslator::class
 ```
 
-
-```php
-Illuminate\Translation\TranslationServiceProvider::class,
-```
-
-by the one included in this package:
-
-```php
-Spatie\TranslationLoader\TranslationServiceProvider::class,
-```
 
 ## Add Language Middleware
 
@@ -87,9 +77,6 @@ To add the translations UI to your panel, add it to the `resources` method of yo
             ])
 ```
 
-
-
-
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
@@ -97,6 +84,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 ## Credits
 
 -   [Fady Mondy](https://github.com/3x1io)
+-   [Timo Railo](https://github.com/madviking)
 
 ## License
 
