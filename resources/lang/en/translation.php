@@ -16,6 +16,8 @@ return [
     "notification" => "Language has been changed succcess",
     "loaded" => "Translations list has been updated",
     "menu" => "Change Language",
+    "flush_cache" => "Flush caches",
+    "translate_single" => "Translate",
     "modal" => [
         "heading" => "Update current language",
         "button" => "Save, language",

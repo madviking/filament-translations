@@ -3,6 +3,7 @@
 namespace io3x1\FilamentTranslations\Extensions;
 
 use Illuminate\Contracts\Translation\Loader;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Translation\Translator;
 use io3x1\FilamentTranslations\Models\Translation;
@@ -24,7 +25,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DbTranslator extends Translator
 {
-    
+
     use TraitTranslator;
 
     public $db_translations;
@@ -36,31 +37,54 @@ class DbTranslator extends Translator
         $this->loadTranslationsFromDatabase();
     }
 
-
     /*
      * This implements main get() method of Translator class for getting an individual translation string
+     * 1. Do we have a cached DB version of the translation in the desired locale?
+     *      -> if yes, return it
+     * 2. Do we have a Laravel file translation in the desired locale?
+     *      -> if yes, return it & add to database
+     * 3. Do we have a cached DB version of the translation in English?
+     *      -> if yes, translate it, add to database and return it
+     * 4. Do we have a Laravel file translation in English?
+     *      -> if yes, translate it, add all versions to db, add to database and return it
+     *
+     *
      * */
-    public function get($key, array $replace = [], $locale = null, $fallback = true) {
+    public function get($key, array $replace = [], $locale = null, $fallback = true)
+    {
+        if(!$locale){$locale = App::currentLocale() ?: 'en';}
 
-        // try the default if it's missing
-        if(!$locale){
-            $locale = app()->getLocale();
+        // 1.
+        if ($translation = $this->keyExists($key, $locale)) {
+            return $translation;
         }
 
-        // db overrides files
-        if(isset($this->db_translations[$locale][$key])){
-            return $this->db_translations[$locale][$key];
+        // 2.
+        if($translation = parent::get($key, $replace, $locale, false)){
+            return $this->addIfAllowed($key, $locale, false,$translation);
         }
 
-        // we try the default method
-        $translation = parent::get($key, $replace, $locale, $fallback);
-
-        // default method might return a key
-        if($translation == $key OR !$translation){
-            $translation = $this->addTranslationItem($key, $locale);
+        // 3.
+        if ($translation = $this->keyExists($key, 'en')) {
+            return $this->addIfAllowed($key, $locale, false,$translation);
         }
 
-        return $translation;
+        // 4.
+        if($translation = parent::get($key, $replace, 'en', false)){
+            return $this->addIfAllowed($key, $locale, false,$translation);
+        }
+
+        return $key;
+    }
+
+    protected function addIfAllowed(string $key, string $locale = 'en', bool $do_translation=false, string $existing_string=''): string {
+        if (config('filament-translations.auto_create')) {
+            return $this->addTranslationItem($key, $locale, false, $existing_string);
+        } elseif($existing_string){
+            return $existing_string;
+        }
+
+        return $original_key;
     }
 
 

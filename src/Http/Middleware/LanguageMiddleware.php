@@ -20,6 +20,9 @@ class LanguageMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+
+        
+
         if ($request->user()) {
             if (!empty($request->user()->lang)) {
                 app()->setLocale($request->user()->lang);

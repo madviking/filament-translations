@@ -27,12 +27,15 @@ class SaveScan
     {
         $scanner = app(Scan::class);
 
+        // for adding new items to db, we already care about English version
+        $locale = 'en';
+
         collect($this->paths)->each(function ($path) use ($scanner) {
             $scanner->addScannedPath($path);
         });
 
         foreach($scanner->getAllViewFilesWithTranslations() as $key){
-            $this->addTranslationItem($key, $group, $namespace, true);
+            $this->addTranslationItem($key, 'en',true);
         }
     }
 

@@ -3,6 +3,7 @@
 namespace io3x1\FilamentTranslations;
 
 use Filament\Navigation\UserMenuItem;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 use Filament\PluginServiceProvider;
 use io3x1\FilamentTranslations\Extensions\DbTranslator;
@@ -31,7 +32,7 @@ class FilamentTranslationsProvider extends PackageServiceProvider
 
         $this->app->extend('translator', function ($translator, $app) {
             $loader = $translator->getLoader();  // Get the loader from the original translator
-            $locale = app()->getLocale();
+            $locale = App::getLocale();
             return new DbTranslator($loader, $locale);
         });
 
@@ -71,13 +72,7 @@ class FilamentTranslationsProvider extends PackageServiceProvider
                     ]);
                 }
                 else if(config('filament-translations.languages-switcher-menu.position') === 'user'){
-                    Filament::registerUserMenuItems([
-                        UserMenuItem::make()
-                            ->icon(config('filament-translations.languages-switcher-menu.icon'))
-                            ->label(trans('filament-translations::translation.menu'))
-                            ->sort(config('filament-translations.languages-switcher-menu.sort'))
-                            ->url((string)url(config('filament-translations.languages-switcher-menu.url'))),
-                    ]);
+                    Filament::registerUserMenuItems($this->getLanguageMenuItemsForUser());
                 }
 
                 Filament::registerNavigationGroups([
@@ -85,5 +80,22 @@ class FilamentTranslationsProvider extends PackageServiceProvider
                 ]);
             });
         }
+    }
+
+    private function getLanguageMenuItemsForUser(){
+        $locales = config('filament-translations.locales');
+        if(count($locales) < 2){ return []; }
+
+        foreach ($locales as $locale => $locale_name) {
+            $items[] = UserMenuItem::make()
+                ->icon('heroicon-o-globe-europe-africa')
+                ->label(trans($locale_name, [], $locale))
+                ->sort(config('filament-translations.languages-switcher-menu.sort'))
+                ->url((string)url(config('filament-translations.languages-switcher-menu.url')).'/'.$locale);
+        }
+
+        return $items;
+
+
     }
 }

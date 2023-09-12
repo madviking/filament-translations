@@ -5,6 +5,7 @@
 * Google translate support
 * Translate option for individual strings (using English as source language)
 * Simplified scan saving
-* Flush cache
+* Flush cache action
 * Database structure is changed, each language version is now a separate row, making it easier to export data for manual translation
 * Filters for language, group and empty translations
+* Language selector in user menu includes all languages

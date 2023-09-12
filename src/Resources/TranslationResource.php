@@ -20,6 +20,7 @@ class TranslationResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+
     public static function form(Form $form): Form
     {
         return $form
@@ -61,7 +62,7 @@ class TranslationResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('key')
-                    ->searchable(),
+                    ->searchable()->limit(35),
                 Tables\Columns\TextColumn::make('locale')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('group')
@@ -69,10 +70,12 @@ class TranslationResource extends Resource
                 Tables\Columns\TextColumn::make('text')
                     ->searchable()->limit(35),
                 Tables\Columns\TextColumn::make('namespace')
-                    ->searchable(),
-/*                Tables\Columns\TextColumn::make('deleted_at')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
-                    ->sortable(),*/
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

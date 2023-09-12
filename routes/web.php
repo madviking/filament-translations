@@ -15,18 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get(config('filament-translations.languages-switcher-menu.url'), function () {
+Route::get(config('filament-translations.languages-switcher-menu.url') . '/{lang}', function ($lang) {
+
     $user = User::find(auth()->user()->id);
-
-    $langArray = config('filament-translations.switcher');
-
-    if ($user->lang === $langArray[0]) {
-        $user->lang = $langArray[1];
-        $user->save();
-    } else {
-        $user->lang = $langArray[0];
-        $user->save();
-    }
+    $user->lang = $lang;
+    $user->save();
 
     Notification::make()
         ->title(trans('filament-translations::translation.notification'))
@@ -34,7 +27,7 @@ Route::get(config('filament-translations.languages-switcher-menu.url'), function
         ->iconColor('success')
         ->send();
 
-    if(config('filament-translations.redirect') === 'next'){
+    if (config('filament-translations.redirect') === 'next') {
         return back();
     }
 

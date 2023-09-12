@@ -16,6 +16,7 @@ class ManageTranslation extends ManageRecords
 {
     protected static string $resource = TranslationResource::class;
 
+
     protected function getHeaderActions(): array
     {
         return [

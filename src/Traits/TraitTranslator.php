@@ -39,7 +39,7 @@ trait TraitTranslator
             if (!$text->text or $text->text == '[]') {
                 continue;
             }
-            $this->db_translations[$text->namespace][$text->group][$text->locale][$text->key] = $text->text;
+            $this->db_translations[$text->locale][$text->namespace][$text->group][$text->key] = $text->text;
         }
 
         if (config('filament-translations.cache')) {
@@ -48,60 +48,74 @@ trait TraitTranslator
     }
 
 
-    private function splitKey(string $key): array
+    private function splitKey(string $new_key): array
     {
         $namespace = '';
         $group = '*';
 
-        if(strlen($key) > 200){
-            dd($key);
+        if (stristr($new_key, '::')) {
+            $namespace = explode('::', $new_key)[0];
+            $new_key = explode('::', $new_key)[1];
         }
 
-        if (stristr($key, '::')) {
-            $namespace = explode('::', $key)[0];
-            $key = explode('::', $key)[1];
+        if (stristr($new_key, '.')) {
+            $group = explode('.', $new_key)[0];
         }
 
-        if (stristr($key, '.')) {
-            $group = explode('.', $key)[0];
+        return ['group' => $group, 'namespace' => $namespace, 'new_key' => $new_key];
+    }
+
+    protected function keyExists(string $new_key,string $return_locale_string): string{
+        extract($this->splitKey($new_key));
+
+        if (isset($this->db_translations[$return_locale_string][$namespace][$group][$new_key])) {
+            return $this->db_translations[$return_locale_string][$namespace][$group][$new_key];
         }
 
-        return ['group' => $group, 'namespace' => $namespace, 'key' => $key];
+        return '';
     }
 
     /*
      * Adds translation and language versions. Careful with the do_translation parameter as it
      * can cause a loop if used incorrectly for doing translation.
      *
-     * @var string $key - translation key, format scope::group.key
+     * @var string $new_key - translation key, format scope::group.key
      * @var string $return_locale_string - return translation in this locale
      * @var bool $do_translation - whether to attempt translating with Laravel standard way
      * */
-    protected function addTranslationItem(string $key, string $return_locale_string = 'en', bool $do_translation=false): string
+    protected function addTranslationItem(string $original_key, string $return_locale_string = 'en', bool $do_translation=false, string $existing_string=''): string
     {
-        if(!$key){ return ''; }
+        // make sure we are working with the latest data
+        $this->loadTranslationsFromDatabase();
 
-        extract($this->splitKey($key));
+        // this holds the return value
+        $return = $existing_string;
 
-        if (isset($this->db_translations[$namespace][$group][$return_locale_string][$key])) {
-            return $this->db_translations[$namespace][$group][$return_locale_string][$key];
+        if(!$original_key){ return ''; }
+
+        extract($this->splitKey($original_key));
+
+        if ($exists = $this->keyExists($original_key,$return_locale_string)) {
+            return $exists;
         }
 
+        // go through all locales when adding
         $locales = config('filament-translations.add_all_locales') ? array_keys(config('filament-translations.locales')) : ['en'];
 
         if ($namespace and $namespace != '*') {
-            $translation_key = $namespace . '::' . $key;
+            $translation_key = $namespace . '::' . $new_key;
         } else {
-            $translation_key = $key;
+            $translation_key = $new_key;
         }
 
-        $original_english = $do_translation ? trans($translation_key, [], 'en') : $translation_key;
-        $return = $original_english;
+        if(!$existing_string){
+            $existing_string = $do_translation ? trans($translation_key, [], 'en') : $translation_key;
+        }
 
         foreach ($locales as $locale) {
-            $original_localized = $do_translation ? trans($translation_key, [], $locale) : $translation_key;
+            $string_to_add = $existing_string;
 
-            $exists = Translation::where('key', $key)
+            $exists = Translation::where('key', $new_key)
                 ->where('group', $group)
                 ->where('namespace', $namespace)
                 ->where('locale', $locale)
@@ -109,27 +123,19 @@ trait TraitTranslator
 
             if($exists){ continue; }
 
+            // in this case we do translation, otherwise we are saving either existing string that has been sent to this function or the original key
+            if(config('filament-translations.google_key') and config('filament-translations.google_translate')){
+                if($locale != $return_locale_string){
+                    $string_to_add = $this->googleTranslate($existing_string, $locale, $return_locale_string);
+                }
+            }
+
             $translation = new Translation();
-            $translation->key = $key;
+            $translation->key = $new_key;
             $translation->group = $group;
             $translation->namespace = $namespace;
             $translation->locale = $locale;
-
-            /*
-             * Apologies for hard to understand logic here.
-             * */
-
-            if($locale != 'en' and config('filament-translations.google_key') and config('filament-translations.google_translate') AND !$do_translation) {
-                $translation->text = $this->googleTranslate($original_english, $locale);
-            }elseif(!$do_translation){
-                $translation->text = $key;
-            }elseif ($original_localized != $key and $locale != 'en' and $original_localized != $namespace . '::' . $key) {
-                $translation->text = $original_localized;
-            } elseif ($locale != 'en' and config('filament-translations.google_key') and config('filament-translations.google_translate')) {
-                $translation->text = $this->googleTranslate($original_english, $locale);
-            } else {
-                $translation->text = $original_english;
-            }
+            $translation->text = $string_to_add;
 
             if ($return_locale_string == $locale) {
                 $return = $translation->text;

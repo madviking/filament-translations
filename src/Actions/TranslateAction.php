@@ -28,7 +28,7 @@ class TranslateAction extends Action
     {
         parent::setUp();
 
-        $this->label(__('filament-translations::translate.single.label'));
+        $this->label(__('filament-translations::translation.translate_single'));
 
         $this->modalHeading(fn (): string => __('filament-actions::edit.single.modal.heading', ['label' => $this->getRecordTitle()]));
         $this->modalSubmitActionLabel(__('filament-actions::edit.single.modal.actions.save.label'));
