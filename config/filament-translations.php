@@ -11,8 +11,8 @@ return [
     */
     "paths" => [
         app_path(),
-        resource_path('views'),
-        base_path('vendor')
+        //resource_path('views'),
+        //base_path('vendor')
     ],
 
     /*
@@ -25,12 +25,6 @@ return [
     */
     "redirect" => "next",
 
-    /* Automatically create a translation record if it doesn't exist yet */
-    "auto_create" => true,
-
-    /* If string for targeted locale doesn't exist, create the record and translate with Google. */
-    "google_translate" => true,
-    "google_key" => 'YOUR_GOOGLE_KEY',
 
     /*
     |--------------------------------------------------------------------------
@@ -53,11 +47,10 @@ return [
     | add the locals that will be show on the languages selector
     |
     */
-    "locals" => [
+    "locales" => [
         "en" => "English",
-        "ar" => "Arabic",
-        "pt_BR" => "Português (Brasil)",
-        "my" => "Burmese"
+        "fi" => "Finnish",
+        "sv" => "Swedish",
     ],
 
     /*
@@ -79,8 +72,9 @@ return [
     |
     */
     "switcher" => [
-        "ar",
         "en",
+        "fi",
+        "sv",
     ],
 
     /*
@@ -94,11 +88,25 @@ return [
 
     "languages-switcher-menu" => [
         "group" => "Translations",
-        "icon" => "heroicon-o-translate",
+        "icon" => "heroicon-o-user-circle",
         "sort" => 10,
         "url" => 'admin/translations/change',
         "position" => "user" //[user|navigation]
     ],
+
+    /* Automatically create a translation record if it doesn't exist yet (only creates to db, not to files) */
+    "auto_create" => true,
+
+    /* Add to all locales */
+    "add_all_locales" => true,
+
+    /* If string for targeted locale doesn't exist, create the record and translate with Google. */
+    "google_translate" => true,
+    "google_key" => env('GOOGLE_TRANSLATION_KEY', ''),
+
+    /* keep in mind, that your db should be somewhat as effective as your cache engine in doing
+    simple fetch_all, so you don't necessarily need the cache */
+    "cache" => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -108,6 +116,6 @@ return [
     | use simple modal resource for the translation resource
     |
     */
-    "modal" => true,
+    "modal" => false,
 
 ];

@@ -25,8 +25,6 @@ class FilamentTranslationsProvider extends PackageServiceProvider
         TranslationResource::class,
     ];
 
-
-
     public function boot(): void
     {
         parent::boot();

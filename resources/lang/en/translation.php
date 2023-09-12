@@ -11,7 +11,7 @@ return [
     "group" => "Group",
     "key" => "Key",
     "text" => "Text",
-    "scan" => "Scan For New Languages",
+    "scan" => "Find language strings",
     "namespace" => "Namespace",
     "notification" => "Language has been changed succcess",
     "loaded" => "Translations list has been updated",

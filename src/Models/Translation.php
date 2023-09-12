@@ -26,12 +26,10 @@ class Translation extends LanguageLine
     use TraitTranslator;
 
     public $translatable = ['text'];
-
     /** @var array */
     public $guarded = ['id'];
-
     /** @var array */
-    protected $casts = ['text' => 'array'];
+    protected $casts = ['text' => 'string'];
 
     protected $table = "language_lines";
 
@@ -60,6 +58,7 @@ class Translation extends LanguageLine
 
         $locale = $locale ?? app()->getLocale();
 
+        //dd($locale);
         // todo: add missing translation
 
         // todo: google translate

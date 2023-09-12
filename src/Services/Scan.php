@@ -4,6 +4,7 @@ namespace io3x1\FilamentTranslations\Services;
 
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Filesystem\Filesystem;
+use mysql_xdevapi\Collection;
 use Symfony\Component\Finder\SplFileInfo;
 
 class Scan
@@ -41,7 +42,7 @@ class Scan
         $this->scannedPaths->push($path);
     }
 
-    public function getAllViewFilesWithTranslations(): array
+    public function getAllViewFilesWithTranslations()
     {
         /*
          * This pattern is derived from Barryvdh\TranslationManager by Barry vd. Heuvel <barryvdh@gmail.com>
@@ -50,6 +51,7 @@ class Scan
          */
         $functions = [
             'trans',
+            '__',
             'trans_choice',
             'Lang::get',
             'Lang::choice',
@@ -118,6 +120,7 @@ class Scan
         /** @var SplFileInfo $file */
         foreach ($this->disk->allFiles($this->scannedPaths->toArray()) as $file) {
             $dir = dirname($file);
+
             if(\Str::startsWith($dir,$excludedPaths)) {
                 continue;
             }
@@ -125,15 +128,9 @@ class Scan
             if (preg_match_all("/$patternA/siU", $file->getContents(), $matches)) {
                 $trans->push($matches[2]);
             }
-
-            if (preg_match_all("/$patternB/siU", $file->getContents(), $matches)) {
-                $__->push($matches[2]);
-            }
-
-            if (preg_match_all("/$patternC/siU", $file->getContents(), $matches)) {
-                $__->push($matches[2]);
-            }
         }
-        return [$trans->flatten()->unique(), $__->flatten()->unique()];
+
+        // we only need the keys
+        return $trans->flatten()->unique();
     }
 }

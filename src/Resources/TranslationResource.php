@@ -11,6 +11,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Filters\Filter;
+use io3x1\FilamentTranslations\Actions\TranslateAction;
 use io3x1\FilamentTranslations\Resources\TranslationResource\Pages\ManageTranslation;
 
 class TranslationResource extends Resource
@@ -30,8 +31,10 @@ class TranslationResource extends Resource
                     ->required()
                     ->maxLength(65535)
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('text')
-                    ->required(),
+                Forms\Components\Textarea::make('text')
+                    ->required()
+                    ->maxLength(65535)
+                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('metadata'),
                 Forms\Components\TextInput::make('namespace')
                     ->required()
@@ -64,12 +67,12 @@ class TranslationResource extends Resource
                 Tables\Columns\TextColumn::make('group')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('text')
-                    ->searchable(),
+                    ->searchable()->limit(35),
                 Tables\Columns\TextColumn::make('namespace')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('deleted_at')
+/*                Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable(),*/
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -80,15 +83,18 @@ class TranslationResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('locale')
+                    ->translateLabel('Locale')
+                    ->options(config('filament-translations.locales')),
                 Tables\Filters\SelectFilter::make('group')
                     ->options(Translations::all()->pluck('group','group')->unique()->toArray()),
                 Filter::make('is_empty')
-                    ->translateLabel('Translation missing')
+                    ->translateLabel('Translation empty')
                     ->toggle()
-                    ->query(fn (Builder $query): Builder => $query->whereJsonLength('text',0)),
-                ])
-
+                    ->query(fn (Builder $query): Builder => $query->where('text','=', ''))
+                    ])
             ->actions([
+                TranslateAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
@@ -101,11 +107,20 @@ class TranslationResource extends Resource
                 Tables\Actions\CreateAction::make(),
             ]);
     }
-    
+
+
     public static function getPages(): array
     {
         return [
             'index' => ManageTranslation::route('/'),
         ];
     }
+
+    public function scan(): void
+    {
+        $scan = new SaveScan();
+        $scan->save();
+        $this->notify('success', 'Translation Has Been Loaded');
+    }
+
 }

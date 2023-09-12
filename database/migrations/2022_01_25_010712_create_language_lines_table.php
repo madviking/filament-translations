@@ -19,7 +19,7 @@ class CreateLanguageLinesTable extends Migration
             $table->index('group');
             $table->text('key');
             $table->string('locale')->index()->default('en');
-            $table->jsonb('text');
+            $table->text('text');
             $table->jsonb('metadata')->nullable();
             $table->string('namespace')->default('*');
             $table->index('namespace');

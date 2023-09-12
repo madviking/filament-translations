@@ -1,6 +1,7 @@
 {
     "name": "3x1io/filament-translations",
     "description": "Translations With DB & UI",
+    "version": "1.1.0",
     "keywords": [
         "laravel",
         "translations",
@@ -19,15 +20,18 @@
             "name": "3x1",
             "email": "info@3x1.io",
             "role": "CEO"
-        }
+        },
+        {
+            "name": "Timo Railo",
+            "email": "timo@east.fi",
+            "role": "Codebender"
+        },
     ],
     "minimum-stability": "dev",
     "require": {
         "php": "^8.1",
         "filament/filament": "^3.0",
-        "filament/notifications": "^3.0-stable",
-        "spatie/laravel-translation-loader": "^2.7.6",
-        "spatie/laravel-package-tools": "^1.16"
+        "filament/notifications": "^3.0-stable"
     },
     "config": {
         "sort-packages": true
