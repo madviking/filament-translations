@@ -6,8 +6,8 @@ Manage your translation with DB and cache, you can scan your languages tags like
 
 ## Screenshots
 
-![Screenshot of list](./arts/list.png)
-![Screenshot of edit](./arts/edit.png)
+![Screenshot of list](./arts/list2.png)
+![Screenshot of edit](./arts/edit2.png)
 ![Screenshot of switcher](./arts/switcher.png)
 
 ## Installation
