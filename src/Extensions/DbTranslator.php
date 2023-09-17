@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Translation\Translator;
 use io3x1\FilamentTranslations\Models\Translation;
 use io3x1\FilamentTranslations\Traits\TraitTranslator;
-use Spatie\TranslationLoader\LanguageLine;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 

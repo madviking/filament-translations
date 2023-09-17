@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use io3x1\FilamentTranslations\Traits\TraitTranslator;
-use Spatie\TranslationLoader\LanguageLine;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
