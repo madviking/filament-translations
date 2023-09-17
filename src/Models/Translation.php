@@ -2,6 +2,7 @@
 
 namespace io3x1\FilamentTranslations\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
@@ -20,7 +21,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * */
 
 
-class Translation extends LanguageLine
+class Translation extends Model
 {
     use HasFactory;
     use SoftDeletes;
