@@ -1,7 +1,7 @@
 {
     "name": "3x1io/filament-translations",
     "description": "Translations With DB & UI",
-    "version": "0.1.1",
+    "version": "dev-0.2.0",
     "keywords": [
         "laravel",
         "translations",

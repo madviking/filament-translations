@@ -51,7 +51,9 @@ class DbTranslator extends Translator
      * */
     public function get($key, array $replace = [], $locale = null, $fallback = true)
     {
-        if(!$locale){$locale = App::currentLocale() ?: 'en';}
+        if (!$locale) {
+            $locale = App::currentLocale() ?: 'en';
+        }
 
         // 1.
         if ($translation = $this->keyExists($key, $locale)) {
@@ -59,27 +61,28 @@ class DbTranslator extends Translator
         }
 
         // 2.
-        if($translation = parent::get($key, $replace, $locale, false)){
-            return $this->addIfAllowed($key, $locale, false,$translation);
+        if ($translation = parent::get($key, $replace, $locale, false) and is_string($translation)) {
+            return $this->addIfAllowed($key, $locale, false, $translation);
         }
 
         // 3.
-        if ($translation = $this->keyExists($key, 'en')) {
-            return $this->addIfAllowed($key, $locale, false,$translation);
+        if ($translation = $this->keyExists($key, 'en') and is_string($translation)) {
+            return $this->addIfAllowed($key, $locale, false, $translation);
         }
 
         // 4.
-        if($translation = parent::get($key, $replace, 'en', false)){
-            return $this->addIfAllowed($key, $locale, false,$translation);
+        if ($translation = parent::get($key, $replace, 'en', false) and is_string($translation)) {
+            return $this->addIfAllowed($key, $locale, false, $translation);
         }
 
         return $key;
     }
 
-    protected function addIfAllowed(string $key, string $locale = 'en', bool $do_translation=false, string $existing_string=''): string {
+    protected function addIfAllowed(string $key, string $locale = 'en', bool $do_translation = false, string $existing_string = ''): string
+    {
         if (config('filament-translations.auto_create')) {
             return $this->addTranslationItem($key, $locale, false, $existing_string);
-        } elseif($existing_string){
+        } elseif ($existing_string) {
             return $existing_string;
         }
 
